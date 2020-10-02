@@ -1,0 +1,161 @@
+---
+  # ! ---------- Em todos os hosts ---------- !
+  #  - Adição de Repositorio
+
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Instalar gerenciador de chaves gnupg  
+      become: true
+      apt:
+        name: gnupg
+        update_cache: no
+      when: ansible_distribution == "Debian"
+
+    - name: Adicionar chave Bareos
+      become: true
+      apt_key:
+        url: "http://download.bareos.org/bareos/release/19.2/Debian_10/Release.key"
+      when: ansible_distribution == "Debian"
+
+    - name: Adicionar Repositorio Bareos (Debian)
+      become: true
+      apt_repository:
+        repo: deb http://download.bareos.org/bareos/release/19.2/Debian_10 /
+        update_cache: yes
+        filename: bareos
+      when: ansible_distribution == "Debian"
+
+    - name: Adicionar Repositorio Bareos (CentOS)
+      become: yes
+      shell: 
+        cmd: 'curl http://download.bareos.org/bareos/release/latest/CentOS_8/bareos.repo -o /etc/yum.repos.d/bareos.repo'
+      when: ansible_distribution == "CentOS"
+
+  # ! ---------- DIRECTOR ---------- !
+  # - postgresql
+  # - bareos-{dir,sd,fd}
+  # - bareos-webui
+
+- hosts: director
+  remote_user: root
+
+  tasks:
+    - name: Instalação dos pacotes
+      become: true
+      apt:
+        update_cache: no
+        name: '{{ item }}'
+      loop:
+        - postgresql
+        - bareos
+        - bareos-webui
+
+    - name: Inicialização dos Serviços
+      become: true
+      service:
+        name: '{{ item }}'
+        state: started
+      loop:
+        - bareos-dir
+        - bareos-sd
+        - bareos-fd
+
+    - name: Adição do client
+      become: true
+      shell:
+        cmd: echo 'configure add client name=client-fd address=192.168.0.3 password=PassW0rd' | bconsole
+
+    - name: Configuração do bareos-webui
+      become: true
+      copy:
+        force: yes
+        backup: yes
+        src: ../bareos-webui/
+        dest: /etc/
+        mode: u=rw,g=r,o=r
+
+    - name: Reinicialização Apache
+      become: true
+      service:
+        name: apache2
+        state: restarted
+
+    - name: Configuração do bareos-dir
+      become: true
+      copy:
+        force: yes
+        backup: yes
+        src: ../bareos-config-server/
+        dest: /etc/bareos/
+        mode: u=rw,g=r,o=r
+
+    - name: Reinicialização dos serviços
+      become: true
+      service:
+        name: '{{ item }}'
+        state: restarted
+      loop:
+        - bareos-dir
+        - bareos-sd
+        - bareos-fd
+
+    - name: Criação de Storage de Backup
+      remote_user: vagrant
+      become: true
+      shell:
+        cmd: bash -c 'mkdir -p /backup/{COMPLETO,INCREMENTAL,DIFERENCIAL} && chown -R bareos:bareos /backup/ && chmod -R 700 /backup/'
+
+  handlers:
+
+
+
+  # ! ---------- CLIENT ---------- !
+  # - bareos-fd
+
+- hosts: client
+  remote_user: root
+
+  tasks:
+    - name: Install bareos-fd
+      when: ansible_distribution == "CentOS"
+      become: yes
+      dnf:
+        name:
+          - bareos-filedaemon
+
+    - name: Instalação bareos-client
+      when: ansible_distribution == "Debian"
+      become: true
+      apt:
+        name: bareos-client
+
+    - name: Configuração do client-fd
+      become: true
+      copy:
+        force: yes
+        backup: yes
+        src: ../bareos-config-client/
+        dest: /etc/bareos/
+        mode: u=rw,g=r,o=r
+
+    - name: Reinicialização bareos-fd
+      become: yes
+      service:
+        name: bareos-fd
+        state: restarted
+
+    - name: Criação das pastas/arquivos
+      remote_user: vagrant
+      shell:
+        cmd: bash -c 'for i in {1..3};do mkdir ~/teste$i;for j in {1..10};do touch ~/teste$i/arquivo$j;done;done'
+
+    - name: Adição host director
+      become: yes
+      lineinfile:
+        path: /etc/hosts
+        insertafter: 127.0.*
+        line: 192.168.0.2   bareos-dir
+...
+
