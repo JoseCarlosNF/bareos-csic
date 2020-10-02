@@ -1,8 +1,12 @@
 ![logo-bareos](https://raw.githubusercontent.com/bareos/bareos/master/webui/public/img/bareos.png)
 
+*Inspirado em: https://github.com/barcus/bareos*
+
+---
+
 ## :rocket: Execução do ambiente de testes
 
-Requisitos:
+**Requisitos**:
 
 - vagrant
 - ansible
@@ -45,6 +49,5 @@ Password: admin
 - [ ] storages
 - [ ] schedules
 - [ ] devices
-- [ ] Buscar por meios de definir a senha do FD externamente, antes da criação da infraestrutura. https://github.com/fw7/docker-bareos-client
-- [ ] Construir imagem docker. Pesquisar por alternativas prontas também é uma opção.
-
+- [x] Construir imagem docker. Pesquisar por alternativas prontas também é uma opção.
+  - O repositório [barcus/bareos](https://github.com/barcus/bareos) é uma otima alternativa ao trabalho de contrução da infraestrutura em containers. Mas, deve-se ressaltar a **importancia do rebuild das imagens**.
