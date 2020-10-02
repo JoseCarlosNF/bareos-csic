@@ -30,6 +30,7 @@ ansible-playbook -i hosts.ini playbook.yml
 User: admin
 Password: admin
 ```
+
 ## :compass: Guias
 
 - [Criar novos serviços de backup](./CRIAR-NOVOS-BACKUPS.md)
