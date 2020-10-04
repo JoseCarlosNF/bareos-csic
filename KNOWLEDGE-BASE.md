@@ -1,0 +1,6 @@
+- [Instalação de extenções php em containers](https://olvlvl.com/2019-06-install-php-ext-source)
+- **Gettext** - Oferece suporte para aplicações multi idioma
+  - [GNU Project](https://www.gnu.org/software/gettext/)
+  - [PHP Documentation](https://www.php.net/manual/pt_BR/book.gettext.php)
+- **MySQLi** - Extenção MySQL para PHP
+  - [PHP Documentation](https://www.php.net/manual/pt_BR/book.mysqli.php)
