@@ -4,3 +4,6 @@
   - [PHP Documentation](https://www.php.net/manual/pt_BR/book.gettext.php)
 - **MySQLi** - Extenção MySQL para PHP
   - [PHP Documentation](https://www.php.net/manual/pt_BR/book.mysqli.php)
+- [Linux Alpine Usage](https://github.com/gliderlabs/docker-alpine/blob/master/docs/usage.md)
+- [Administração de Pacotes no Alpine Linux](https://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management)
+- [Nginx Command-line Parameters](http://nginx.org/en/docs/switches.html)
