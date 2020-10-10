@@ -21,6 +21,7 @@
 ```
 vagrant up
 ````
+
 2. Executar as tasks do ansible
 
 ```
@@ -46,13 +47,24 @@ Password: admin
 - [Gerar certificados](./GERAR-CERTIFICADOS-TLS.md)
 
 ## :ballot_box_with_check: TO-DO
+- Definir os arquivos de configuração. Uso especifico, não será versionado:
+  - [ ] jobs
+  - [ ] filesets
+  - [ ] pools
+  - [ ] storages
+  - [ ] schedules
+  - [ ] devices
 
-- [ ] jobs
-- [ ] filesets
-- [ ] pools
-- [ ] storages
-- [ ] schedules
-- [ ] devices
-- [x] Construir imagem docker. Pesquisar por alternativas prontas também é uma opção.
-  - O repositório [barcus/bareos](https://github.com/barcus/bareos) é uma otima alternativa ao trabalho de contrução da infraestrutura em containers. Mas, deve-se ressaltar a **importancia do rebuild das imagens**.
+- O repositório [barcus/bareos](https://github.com/barcus/bareos) foi adotado como base para o projeto, usando containers.
+  - :warning: Foram encontrados alguns problemas ao rebuildar as imagens, a partir dos arquivos originais.
+    1. As versões não são mais compativeis.
+    2. O container de entrega de notificações foi atualizado.
+    3. O entrypoint do director, não é mais funcional. O projeto do bareos já foi atualizado e existem pontos a serem corrigidos.
+- [ ] Revisão dos containers
+  - [ ] Definir versões fixas para os pacotes, a fim de evitar novas compicações, em builds posteriores.
+  - [ ] Atualizar as **strings de substituição**, no entrypoint do director
+    - Arquivos de `messages` foram atualizados.
+  - [ ] testar o envio de mensagens para o smtp, a partir do director.
+    - Comando `bsmtp`, enviador de mensagens do bacula.
   - [ ] Estudar o suporte a notificações por email. [namshi/docker-smtp](https://github.com/namshi/docker-smtp)
+    - Existe uma [issue](https://github.com/barcus/bareos/issues/73) e um [PR](https://github.com/barcus/bareos/pull/78) em aberto no repositório original, sobre o suporte à notificações pelo Telegram/Slack.
