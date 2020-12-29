@@ -59,27 +59,25 @@ Password: admin
 - [Adicionar novo cliente](./ADICIONAR-NOVO-CLIENTE.md)
 - [Gerar certificados](./GERAR-CERTIFICADOS-TLS.md)
 
-## :ballot_box_with_check: TO-DO
-- Definir os arquivos de configuração. Uso especifico, não será versionado:
-  - [ ] jobs
-  - [ ] filesets
-  - [ ] pools
-  - [ ] storages
-  - [ ] schedules
-  - [ ] devices
-  - [x] modificar as permissões de /etc/bareos no bareos-dir
-  - [x] habilitar EXIM no entrypoint
+## :clapper: Histórico do projeto
 
 - O repositório [barcus/bareos](https://github.com/barcus/bareos) foi adotado como base para o projeto, usando containers.
-  - :warning: Foram encontrados alguns problemas ao rebuildar as imagens, a partir dos arquivos originais.
-    1. As versões não são mais compativeis.
-    2. O container de entrega de notificações foi atualizado.
-    3. O entrypoint do director, não é mais funcional. O projeto do bareos já foi atualizado e existem pontos a serem corrigidos.
-- [ ] Revisão dos containers
-  - [ ] Definir versões fixas para os pacotes, a fim de evitar novas compicações, em builds posteriores.
-  - [ ] Atualizar as **strings de substituição**, no entrypoint do director
+  - :warning: Foram encontrados alguns problemas ao reconstruir as imagens, a partir dos arquivos de definição(Dockerfiles) originais. Citados a seguir.
+    1. As versões não eram mais compativeis.
+    2. O container de entrega de notificações(namshi/smtp) foi atualizado.
+
+        **Obs**: Atualmente o **telegram foi adotado como meio de notifiação**. Entretanto não é possível obter informações muito relevante a cerca dos processos, apenas o status final de execução dos jobs(OK, Fail, OK -- with warnings). Tal como era feito com o serviço de emails.
+
+    3. O entrypoint do director, não era mais funcional. O projeto do bareos já foi atualizado e existem pontos a serem corrigidos.
+
+        **Obs**: Os pontos já foram corrigidos. Tratava-se, de inconsistências nos arquivos de configuração, principalmente de notificação(messages). Fato que adicionado ao problema anterior gerava instabilidade na aplicação, por erros no processo de entregra das notificações.
+
+- [x] Revisão dos containers
+  - [x] Definir versões fixas para os pacotes, a fim de evitar novas compicações, em builds posteriores.
+  - [x] Atualizar as **strings de substituição**, no entrypoint do director
     - Arquivos de `messages` foram atualizados.
-  - [ ] testar o envio de mensagens para o smtp, a partir do director.
-    - Comando `bsmtp`, enviador de mensagens do bacula.
-  - [ ] Estudar o suporte a notificações por email. [namshi/docker-smtp](https://github.com/namshi/docker-smtp)
-    - Existe uma [issue](https://github.com/barcus/bareos/issues/73) e um [PR](https://github.com/barcus/bareos/pull/78) em aberto no repositório original, sobre o suporte à notificações pelo Telegram/Slack.
+  - Estudar o suporte a notificações por email. [namshi/docker-smtp](https://github.com/namshi/docker-smtp)
+
+    **Obs**: Como citado anteriormente o telegram foi adotado como meio de notificação. Assim foi deixado de lado, ao menos por enquanto o uso de notificações por email.
+
+    - A [issue](https://github.com/barcus/bareos/issues/73) e o [PR](https://github.com/barcus/bareos/pull/78), do repositório inspirador, relacionados ao suporte à notificações pelo Telegram/Slack foi imcorporada na aplicação.
