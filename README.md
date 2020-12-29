@@ -5,8 +5,16 @@
   <img src="https://csirt.ufpa.br/images/ctic1112.png" height="80">
 </p>
 
+<p align="center"><b>UNIVERSIDADE FEDERAL DO PARÁ - UFPA</b></p>
+<p align="center"><b>CENTRO DE TECNOLOGIA DA INFORMAÇÃO E COMUNICAÇÃO - CTIC</b></p>
+<p align="center"><b>COORDENADORIA DE SEGURANÇA DA INFORMAÇÃO E COMUNICAÇÃO - CSIC</b></p>
+
 <p align="center">Repositório Oficial do Bareos: https://github.com/bareos/bareos</p>
 <p align="center">Inspirado em: https://github.com/barcus/bareos</p>
+
+## :whale: Docker
+
+[ambiente com containers](./docker)
 
 ## :rocket: Execução do ambiente de testes
 
@@ -20,7 +28,7 @@
 
 ```
 vagrant up
-````
+```
 
 2. Executar as tasks do ansible
 
@@ -40,6 +48,11 @@ User: admin
 Password: admin
 ```
 
+- portas usadas para o serviço:
+  - client escuta 9102
+  - director escuta 9103
+  - director escuta 9100
+
 ## :compass: Guias
 
 - [Criar novos serviços de backup](./CRIAR-NOVOS-BACKUPS.md)
@@ -54,6 +67,8 @@ Password: admin
   - [ ] storages
   - [ ] schedules
   - [ ] devices
+  - [x] modificar as permissões de /etc/bareos no bareos-dir
+  - [x] habilitar EXIM no entrypoint
 
 - O repositório [barcus/bareos](https://github.com/barcus/bareos) foi adotado como base para o projeto, usando containers.
   - :warning: Foram encontrados alguns problemas ao rebuildar as imagens, a partir dos arquivos originais.
