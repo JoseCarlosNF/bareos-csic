@@ -59,7 +59,7 @@ Password: admin
 - [Adicionar novo cliente](./ADICIONAR-NOVO-CLIENTE.md)
 - [Gerar certificados](./GERAR-CERTIFICADOS-TLS.md)
 
-## :clapper-board: Histórico do projeto
+## :clapper: Histórico do projeto
 
 - O repositório [barcus/bareos](https://github.com/barcus/bareos) foi adotado como base para o projeto, usando containers.
   - :warning: Foram encontrados alguns problemas ao reconstruir as imagens, a partir dos arquivos de definição(Dockerfiles) originais. Citados a seguir.
