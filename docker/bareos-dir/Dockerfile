@@ -29,7 +29,6 @@ RUN apk add --no-cache \
     tar
 
 # Set enviroment to start bareos-dir
-# RUN tar czf /bareos-dir.tgz /etc/bareos
 RUN mkdir /run/bareos \
  && chown bareos:bareos /run/bareos
 

@@ -11,6 +11,8 @@ services:
       - ./credentials/bareos-webui.env
       - ./credentials/database.env
       - ./credentials/notification.env
+    environment:
+      - TZ=America/Belem
     depends_on:
       - bareos-db
 
@@ -48,6 +50,9 @@ services:
       - mysql_data:/var/lib/mysql
     env_file:
       - ./credentials/database.env
+    environment:
+      - TZ=America/Belem
+
 
   # smtpd:
   #   image: namshi/smtp
