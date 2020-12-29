@@ -1,0 +1,35 @@
+#!/bin/sh
+if [ ${WEBHOOK_NOTIFICATION} = true ] && [ ${WEBHOOK_TYPE} = "slack" ] ; then
+
+  if [ $6 = "OK" ] ; then
+    /usr/bin/curl -X POST \
+         -H 'Content-Type: application/json' \
+         -d '{"text": "✅ '$*'"}' \
+         ${WEBHOOK_URL}
+  else
+    /usr/bin/curl -X POST \
+         -H 'Content-Type: application/json' \
+         -d '{"text": "❌ '$*'"}' \
+         ${WEBHOOK_URL}
+  fi
+
+elif [ ${WEBHOOK_NOTIFICATION} = true ] && [ ${WEBHOOK_TYPE} = "telegram" ] ; then
+
+  if [ ${@: -2} = "OK" ] ; then
+    /usr/bin/curl -X POST \
+         ${WEBHOOK_URL} \
+         -d "chat_id=$WEBHOOK_CHAT_ID&parse_mode=markdown&text=✅ $*&disable_notification=false"
+         return 0
+  elif [ ${@: -8} = "warnings" ] ; then
+    /usr/bin/curl -X POST \
+         ${WEBHOOK_URL} \
+         -d "chat_id=$WEBHOOK_CHAT_ID&parse_mode=markdown&text=⚠ $*&disable_notification=false"
+         return 0
+  else
+    /usr/bin/curl -X POST \
+         ${WEBHOOK_URL} \
+         -d "chat_id=$WEBHOOK_CHAT_ID&parse_mode=markdown&text=❌ $*&disable_notification=false"
+         return 0
+  fi
+  
+fi
