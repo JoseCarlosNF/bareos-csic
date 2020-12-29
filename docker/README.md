@@ -68,3 +68,74 @@ WEBHOOK_URL=https://api.telegram.org/bot<token>/sendMessage
 # for get chat_id telegram use (https://api.telegram.org/bot<YourBOTToken>/getUpdates)
 WEBHOOK_CHAT_ID=<chat_id>
 ```
+
+## :clipboard: docker-compose.yml
+
+```yaml
+---
+version: '3'
+services:
+  bareos-dir:
+    image: bareos-dir
+    volumes:
+      - director_config:/etc/bareos
+      - director_data:/var/lib/bareos # required for MyCatalog backup
+    env_file:
+      - ./credentials/bareos-fd.env
+      - ./credentials/bareos-sd.env
+      - ./credentials/bareos-webui.env
+      - ./credentials/database.env
+      - ./credentials/notification.env
+    depends_on:
+      - bareos-db
+
+  bareos-sd:
+    image: bareos-sd
+    ports:
+      - 9103:9103
+    volumes:
+      - storage_config:/etc/bareos
+      - storage_data:/var/lib/bareos/archive
+    env_file:
+      - ./credentials/bareos-sd.env
+
+  bareos-fd:
+    image: bareos-fd
+    volumes:
+      - client_config:/etc/bareos
+      - director_data:/var/lib/bareos-director:ro # required for MyCatalog backup
+    env_file:
+      - ./credentials/bareos-fd.env
+
+  bareos-webui:
+    image: bareos-webui
+    ports:
+      - 8080:9100
+    volumes:
+      - webui_config:/etc/bareos-webui
+      - webui_data:/usr/share/bareos-webui
+    env_file:
+      - ./credentials/bareos-webui.env
+
+  bareos-db:
+    image: mysql:5.6
+    volumes:
+      - mysql_data:/var/lib/mysql
+    env_file:
+      - ./credentials/database.env
+
+  # smtpd:
+  #   image: namshi/smtp
+
+volumes:
+  director_config:
+  director_data:
+  storage_config:
+  storage_data:
+  client_config:
+  webui_config:
+  webui_data:
+  mysql_data:
+...
+```
+
